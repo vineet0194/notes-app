@@ -1,0 +1,50 @@
+.navbar{
+    margin: 0 auto;
+    margin-bottom: 10px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-around;
+    width: 70%;
+    border: 1px solid black;
+    border-radius: 6px;
+}
+
+.headings{
+    margin: 0;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: black;
+    margin-right: 1rem;
+}
+
+.navbar a:hover {
+    color: blue;
+}
+
+.note {
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 10px;
+    width: 15%;
+    break-inside: avoid;
+    margin-bottom: 7px;
+}
+
+.notesContainer{
+    padding: 10px;
+}
+
+.user{
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 10px;
+    width: 15%;
+    break-inside: avoid;
+    margin-bottom: 7px;
+}
+
+.userContainer{
+    padding: 10px;
+}
