@@ -1,16 +1,19 @@
 const mongoose = require('mongoose');
 const z = require('zod');
-require('dotenv').config();
+require('dotenv').config({path: '../.env'});
 
 mongoose.connect(process.env.MONGODB_CONN_URL);
 
-const jwtSecret = ''
-
 const ZodUserSchema = z.object({
-    firstName: z.string().max(10),
-    lastName: z.string().max(10),
-    username: z.string().max(10),
-    email: z.email()
+    firstname: z.string().min(1).max(10),
+    lastname: z.string().min(1).max(10),
+    username: z.string().min(1).max(10),
+    email: z.string().email(),
+});
+
+const ZodNoteSchema = z.object({
+    title: z.string().min(1).max(20),
+    content: z.string().min(1).max(200)
 });
 
 
@@ -28,6 +31,7 @@ const UserSchema = mongoose.Schema({
     username: {
         type: String,
         required: true,
+        unique: true,
         maxLength: 10
     },
     password: {
@@ -37,6 +41,7 @@ const UserSchema = mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true
     }
 });
 
@@ -53,6 +58,7 @@ const NoteSchema = mongoose.Schema({
     },
     author: {
         type: mongoose.SchemaTypes.ObjectId,
+        required: true,
         ref: 'user'
     }
 }, {
@@ -64,7 +70,7 @@ const NoteModel = mongoose.model('note', NoteSchema);
 
 module.exports = {
     ZodUserSchema,
+    ZodNoteSchema,
     UserModel,
-    NoteModel,
-    jwtSecret
+    NoteModel
 };

@@ -6,16 +6,16 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 router.post('/register', async(req, res)=>{
-    const {
-        firstname,
-        lastname,
-        username,
-        email,
-        password
-    } = req.body;
-
-
     try{
+        const {
+            firstname,
+            lastname,
+            username,
+            email,
+            password
+        } = req.body;
+
+
         const payload = {
             firstname,
             lastname,
@@ -26,7 +26,7 @@ router.post('/register', async(req, res)=>{
         const result = ZodUserSchema.safeParse(payload);
         if (!result.success){
             const fieldErrors = result.error.flatten().fieldErrors;
-            return res.json({
+            return res.status(400).json({
                 fieldErrors
             });
         }
@@ -44,6 +44,9 @@ router.post('/register', async(req, res)=>{
                 message: "Found existing user linked with this email!"
             });
         }
+
+        const passwordHash = await argon2.hash(password);
+
         const user = await UserModel.create({
             firstname,
             lastname,
@@ -52,7 +55,6 @@ router.post('/register', async(req, res)=>{
             email
         });
         
-        const passwordHash = await argon2.hash(password);
         const token = jwt.sign({
             sub: user._id,
             email,
@@ -63,11 +65,11 @@ router.post('/register', async(req, res)=>{
         
         res.status(201).json({
             token,
-            message: "User registered successfully!"
+            message: "User registered successfully! JWT Generated."
         });
     } catch(error){
         return res.status(500).json({
-            message: "Some error occured, pls try again."
+            message: "Invalid input (check requirements)."
         });
     }
 });
@@ -78,8 +80,8 @@ router.post('/login', async (req, res)=>{
     try{
         const user = await UserModel.findOne({username});
         if (!user){
-            return res.json({
-                message: "No such user exists!"
+            return res.status(401).json({
+                message: "Invalid username or password!"
             });
         }
         const storedHash = user.password;
