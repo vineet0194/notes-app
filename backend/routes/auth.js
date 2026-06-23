@@ -2,6 +2,7 @@ const { Router } = require('express');
 const router = Router();
 const argon2 = require("argon2");
 const { ZodUserSchema, UserModel, NotesModel } = require('../db/index');
+const authMiddleware = require('../middlewares/authMiddleware');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -101,7 +102,7 @@ router.post('/login', async (req, res)=>{
             });
         } else{
             return res.status(401).json({
-                message: "Invalid password!"
+                message: "Invalid username or password!"
             })
         }
     } catch(error){
@@ -110,5 +111,24 @@ router.post('/login', async (req, res)=>{
         });
     }
 });
+
+router.get('/me', authMiddleware, async (req, res)=>{
+    const token = req.token;
+    try{
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.sub;
+        const user = await UserModel.findOne({_id: userId});
+        return res.json({
+            firstname: user.firstname,
+            lastname: user.lastname,
+            username: user.username,
+            email: user.email
+        });
+    } catch(error){
+        return res.status(500).json({
+            message: "Some error occured, pls try again."
+        });
+    }
+})
 
 module.exports = router;

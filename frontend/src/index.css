@@ -32,7 +32,7 @@
     margin-bottom: 7px;
 }
 
-.notesContainer{
+.notesContainer {
     padding: 10px;
 }
 
@@ -45,6 +45,16 @@
     margin-bottom: 7px;
 }
 
-.userContainer{
+.userContainer {
+    display: flex;
+    justify-content: center;
     padding: 10px;
 }
+
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.

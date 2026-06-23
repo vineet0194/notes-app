@@ -4,6 +4,7 @@ const app = express();
 const notesRouter = require('./routes/notes');
 const authRouter = require('./routes/auth');
 
+app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRouter);
