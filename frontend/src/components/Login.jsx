@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { UserContext } from '../context';
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 export default function Login(){
-    const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
     const [ username, setUsername ] = useState("");
     const [ password, setPassword ] = useState("");
@@ -26,7 +25,7 @@ export default function Login(){
                 }
             })
             setUser(userData.data);
-            navigate("/dashboard");
+            <Navigate to="/login" />
 
         } catch (error) {
             console.error(error);
